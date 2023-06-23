@@ -58,46 +58,46 @@ class SnippetDetails(APIView):
 """
 
 #--Using mixins--
+"""
+class SnippetList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
-# class SnippetList(mixins.ListModelMixin, mixins.CreateModelMixin, generics.GenericAPIView):
-#     queryset = Snippet.objects.all()
-#     serializer_class = SnippetSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
 
+    def get(self,request, *args, **kwargs):
+        return self.list(request, *args, **kwargs)
+    
+    def post(self,request,*args, **kwargs):
+        return self.create(request, *args,**kwargs)
+    
+    def perform_create(self, serializer):
+        serializer.save(owner = self.request.user)
+    
+class SnippetDetails(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin, generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    serializer_class = SnippetSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
-#     def get(self,request, *args, **kwargs):
-#         return self.list(request, *args, **kwargs)
+    def get(self,request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
     
-#     def post(self,request,*args, **kwargs):
-#         return self.create(request, *args,**kwargs)
-    
-#     def perform_create(self, serializer):
-#         serializer.save(owner = self.request.user)
-    
-# class SnippetDetails(mixins.RetrieveModelMixin,mixins.UpdateModelMixin,mixins.DestroyModelMixin, generics.GenericAPIView):
-#     queryset = Snippet.objects.all()
-#     serializer_class = SnippetSerializer
-#     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-
-#     def get(self,request, *args, **kwargs):
-#         return self.retrieve(request, *args, **kwargs)
-    
-#     def put(self,request, *args, **kwargs):
-#         return self.update(request, *args, **kwargs)
+    def put(self,request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
         
-#     def delete(self,request, *args, **kwargs):
-#         return self.destroy(request, *args, **kwargs)
+    def delete(self,request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
     
-# class SnippetHighlight(generics.GenericAPIView):
-#     queryset = Snippet.objects.all()
-#     renderer_classes = [renderers.StaticHTMLRenderer]
+class SnippetHighlight(generics.GenericAPIView):
+    queryset = Snippet.objects.all()
+    renderer_classes = [renderers.StaticHTMLRenderer]
 
-#     def get(self,request, *args, **kwargs):
-#         snippet = self.get_object()
-#         return Response(snippet.highlighted)
-
+    def get(self,request, *args, **kwargs):
+        snippet = self.get_object()
+        return Response(snippet.highlighted)
+"""
 #Using view-set
-class SnippetViewset(viewsets.ModelViewSet):
+class SnippetViewSet(viewsets.ModelViewSet):
     queryset = Snippet.objects.all()
     serializer_class = SnippetSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly, IsOwnerOrReadOnly]
@@ -108,15 +108,15 @@ class SnippetViewset(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
 
-    
-# class UserList(generics.ListAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
+"""    
+class UserList(generics.ListAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
-# class UserDetail(generics.RetrieveAPIView):
-#     queryset = User.objects.all()
-#     serializer_class = UserSerializer
-
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+"""
 #Using view-set
 class UserViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = User.objects.all()

@@ -12,7 +12,7 @@ class SnippetSerializer(serializers.HyperlinkedModelSerializer ):
                   'title', 'code', 'linenos', 'language', 'style']#it specifies that fields should be included when serializing Snippet objects.
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
-    snippets = serializers.HyperlinkedRelatedField(many=True, view_name = 'snippet-detail',ready_only=True)
+    snippets = serializers.HyperlinkedRelatedField(many=True, view_name = 'snippet-detail',queryset=Snippet.objects.all())
     class Meta:
         model = User
         fields = ['id','username','snippets']
